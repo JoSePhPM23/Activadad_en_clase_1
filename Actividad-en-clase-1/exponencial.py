@@ -1,15 +1,20 @@
 import time
 
-#Algoritmo para la sucesión de Fibonacci de complejidad exponencial
-def fibonacci(n):
-    if n <= 1:
-        return n
-    else:
-        return fibonacci(n-1) + fibonacci(n-2)
+# Algoritmo exponencial para calcular la suma de todos los subconjuntos de un array
+def suma_subconjuntos(array):
+    total = 0
+    for i in range(1 << len(array)): 
+        subset_sum = 0
+        for j in range(len(array)):
+            if i & (1 << j):
+                subset_sum += array[j]
+        total += subset_sum
+    return total
 
+# Función para medir el tiempo de ejecución
 def medir_tiempo(funcion, *args):
     inicio = time.time_ns()
-    #Se ejeceuta la función 10 vececs
+    # Se ejecuta la función 10 veces
     for _ in range(10):  
         funcion(*args)
     fin = time.time_ns()
@@ -17,10 +22,12 @@ def medir_tiempo(funcion, *args):
     tiempo_promedio = (fin - inicio) / 10 
     return tiempo_promedio
 
-#Sucesión de Fibonacci para distintos valores de n
-valores_n = [10, 15, 20, 25, 30, 35]
+# Tamaños de arrays
+tamanos = [10, 100, 1000, 10000]
 
-for n in valores_n:
-    tiempo = medir_tiempo(fibonacci, n)
-    print(f"Para n={n}, Tiempo promedio de ejecución: {tiempo} nanosegundos")
+for tamano in tamanos:
+    mi_array = list(range(tamano))
+    tiempo = medir_tiempo(suma_subconjuntos, mi_array)
+    print(f"Tamaño del array: {tamano}, Tiempo promedio de ejecución: {tiempo} nanosegundos")
+
 
